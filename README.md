@@ -1,4 +1,4 @@
-KOREAN
+##KOREAN
 
 # 스마트컨트렉트 실행 순서
 
@@ -13,7 +13,7 @@ KOREAN
 3. TokenLock.sol 함수에 setERC20(address tokenAddress) 을 호춣하여 토큰을 설정합니다.
 4. UnLock 스케줄에 따라 TokenLock.sol에 unLock() 함수를 실행합니다.
 
-ENGLISH
+##ENGLISH
 
 # 스마트컨트렉트 실행 순서
 
