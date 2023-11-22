@@ -1,3 +1,5 @@
+KOREAN
+
 # 스마트컨트렉트 실행 순서
 
 1. mint 폴더에 TokenLock.sol을 7번을 배포합니다.
