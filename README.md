@@ -15,7 +15,7 @@
 
 ## ENGLISH
 
-# 스마트컨트렉트 실행 순서
+# Smart Contract Execution Order
 
 1. Deploy TokenLock.sol seven times in the mint folder.
 
