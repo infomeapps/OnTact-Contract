@@ -107,7 +107,7 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
      * - the caller must have a balance of at least `value`.
      */
     function transfer(address to, uint256 value) public virtual returns (bool) {
-        require(to != Address(this), "You cannot send to this address.");
+        require(to != address(this), "You cannot send to this address.");
         
         address owner = _msgSender();
         _transfer(owner, to, value);
@@ -154,6 +154,8 @@ abstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {
      * `value`.
      */
     function transferFrom(address from, address to, uint256 value) public virtual returns (bool) {
+        require(to != address(this), "You cannot send to this address.");
+
         address spender = _msgSender();
         _spendAllowance(from, spender, value);
         _transfer(from, to, value);

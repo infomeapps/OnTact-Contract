@@ -10,8 +10,8 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
 
     event UnLock(address sender, address receiver, uint256 amount);
 
-    uint8 public _receiverIndex; 
-    IERC20 public _erc20Token; 
+    uint8 public immutable _receiverIndex; 
+    IERC20 public _erc20Token = IERC20(address(0)); 
     uint256 public _totalUnLock = 0; 
     uint256[] public _scheduleAmount; 
   
@@ -41,10 +41,11 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
 
     function setERC20(address tokenAddress) public virtual onlyOwner {
         require(tokenAddress != address(0), "ERC20 is null");
+        require(_erc20Token == IERC20(address(0)), "It's already been assigned");
         _erc20Token = IERC20(tokenAddress); 
     }
 
-    function unLock() public virtual onlyOwner {
+    function unLock() public virtual {
        
         uint256 sum = 0;
 
@@ -83,5 +84,9 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
             balance += _scheduleAmount[i];
         }
         return balance;
+    }
+
+    function getReceiverIndex() public view virtual returns (uint256) {
+        return _receiverIndex;
     }
 }
