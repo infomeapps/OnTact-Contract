@@ -14,8 +14,10 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
     IERC20 public _erc20Token = IERC20(address(0)); 
     uint256 public _totalUnLock = 0; 
     uint256[] public _scheduleAmount; 
-  
-    constructor(uint8 receiverIndex) Ownable(msg.sender) {
+    address public immutable _multiSigWallet;
+
+    constructor(uint8 receiverIndex, address walletSigAddress) Ownable(msg.sender) {
+        require(walletSigAddress != address(0), "walletSigAddress is null");
         require(receiverIndex >= 0 && receiverIndex <= 6, "The scope of the receiverIndex variable is incorrect.");
         require(isSorted(SCHEDULE_TIMES), "The array is not sorted.");
         require(TokenLockConst.SCHEDULE_TIMES.length == TokenLockConst.CONST_SCHEDULE_COUNT, "The array is not sorted.");
@@ -28,6 +30,8 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
         for (uint8 i = 0; i < amounts.length; i++) {
             _scheduleAmount[i] = amounts[i];
         }
+
+        _multiSigWallet = walletSigAddress;
     }
 
     function isSorted(uint256[] memory arr) internal pure returns (bool) {
@@ -46,7 +50,8 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
     }
 
     function unLock() public virtual {
-       
+        require(_multiSigWallet == msg.sender, "multiSigWallet is wrong");
+
         uint256 sum = 0;
 
         for (uint256 i = 0; i < TokenLockConst.SCHEDULE_TIMES.length; i++) {
@@ -55,7 +60,7 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
                 break;
             } 
 
-             uint256 balance = _scheduleAmount[i];
+            uint256 balance = _scheduleAmount[i];
             if(balance > 0) {
                 sum += _scheduleAmount[i];
                 _scheduleAmount[i] = 0;
@@ -68,6 +73,10 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
             emit UnLock(address(this), TokenLockConst.CONST_RECEIVERS[_receiverIndex], sum);
         }
 
+    }
+
+    function getDataUnLock() public pure returns (bytes memory) {
+        return abi.encodeWithSignature("unLock()");
     }
 
     function getReceiver() public view returns (address) {
