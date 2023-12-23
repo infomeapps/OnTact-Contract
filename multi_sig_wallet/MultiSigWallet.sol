@@ -130,6 +130,19 @@ contract MultiSigWallet {
         confirmTransaction(transactionId);
     }
 
+    function submitUnLocks(address[] unlocks, uint value, bytes data)
+        public
+        returns (uint[] transactionId)
+    {
+        uint[] memory txs = new uint[](unlocks.length);
+        for(uint i = 0; i < unlocks.length; i++) {
+            uint txId = addTransaction(unlocks[i], value, data);
+            txs[i] = txId;
+            confirmTransaction(txId);
+        }
+        transactionId = txs;
+    }
+
     /// @dev Allows an owner to confirm a transaction.
     /// @param transactionId Transaction ID.
     function confirmTransaction(uint transactionId)
@@ -141,6 +154,16 @@ contract MultiSigWallet {
         confirmations[transactionId][msg.sender] = true;
         Confirmation(msg.sender, transactionId);
         executeTransaction(transactionId);
+    }
+
+    function confirmUnLocks(uint[] txid)
+        public
+        ownerExists(msg.sender)
+    {
+        for(uint i = 0; i < txid.length; i++) {
+            confirmTransaction(txid[i]);
+        }
+    
     }
 
     /// @dev Allows an owner to revoke a confirmation for a transaction.
