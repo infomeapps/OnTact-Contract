@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "Ownable.sol";
-import "IERC20.sol";
-import "TokenLockConst.sol";
-import "ITokenLock.sol";
+import "./Ownable.sol";
+import "./IERC20.sol";
+import "./TokenLockConst.sol";
+import "./ITokenLock.sol";
 
 contract TokenLock is Ownable, TokenLockConst, ITokenLock {
 
