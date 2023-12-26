@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "ERC20.sol";
-import "ITokenLock.sol";
+import "./ERC20.sol";
+import "./ITokenLock.sol";
 
 contract OnTact is ERC20 {
     constructor(address unlock00, address unlock01, address unlock02, address unlock03, address unlock04, address unlock05, address unlock06) ERC20("OnTact", "ONTACT") {
