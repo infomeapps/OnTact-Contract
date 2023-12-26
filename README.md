@@ -24,13 +24,20 @@
 
 # Smart Contract Execution Order
 
-1. Deploy TokenLock.sol seven times in the mint folder.
+1. MultiSigWallet.sol will be deployed in a multi_sig_wallet folder.
+- Enter three multi-signature addresses in constructor when it's deployed.
 
-- During deployment, parameter value in the constructor (uint8 receiverIndex) function should changes  from 0 to 6
+2. Deploy TokenLock.sol in the mint folder seven times.
+- When deploying it, change the uint8 receiverIndex parameter in constructor from 0 to 6.
+- When deploying it, enter CA address in the address walletSigAddress parameter of constructor.
 
-2. Deploy OnTact.sol to the erc20 folder.
+3. Deploy OnTact.sol in erc20 folder.
+- When deploying it, enter the CA address deployed in TokenLock.sol as parameter for constructor(address unlock00, address unlock01, address unlock02, address unlock03, address unlock04, address unlock05, address unlock06) in constructor.
 
-- When deploying, input the address distributed in TokenLock.sol for parameter value in the constructor (address unlock00, address unlock01, address unlock02, address unlock03, address unlock04, address unlock05, address unlock06)
+4. Call setERC20(address tokenAddress) in TokenLock.sol and set a token.
 
-3. Set up the token by calling setERC20 (address tokenAddress) of the  function in TokenLock.sol.
-4. Run the unLock() function of TokenLock.sol according to the UnLock schedule
+5. Run submitUnLocks in MultiSigWallet.sol according to UnLock schedule.
+- Enter an array of the seven CA addresses deployed in TokenLock.sol as parameter for submitUnLocks.
+
+6. Run confirmUnLocks in MultiSigWallet.sol according to UnLock schedule.
+- Enter an array of transaction id deployed in submitUnLocks as parameter for confirmUnLocks.
