@@ -21,7 +21,7 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
         require(receiverIndex >= 0 && receiverIndex <= 6, "The scope of the receiverIndex variable is incorrect.");
         require(isSorted(SCHEDULE_TIMES), "The array is not sorted.");
         require(TokenLockConst.SCHEDULE_TIMES.length == TokenLockConst.CONST_SCHEDULE_COUNT, "The array is not sorted.");
-        uint256[] memory amounts = TokenLockConst.SCHEDULE_AMOUNT[receiverIndex];
+        uint256[] memory amounts = TokenLockConst.SCHEDULE_AMOUNT;
         require(amounts.length == TokenLockConst.CONST_SCHEDULE_COUNT, "Array is incorrect.");
        
         _receiverIndex = receiverIndex; 
