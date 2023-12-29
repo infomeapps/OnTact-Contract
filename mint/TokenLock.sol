@@ -13,24 +13,36 @@ contract TokenLock is Ownable, TokenLockConst, ITokenLock {
     uint8 public immutable _receiverIndex; 
     IERC20 public _erc20Token = IERC20(address(0)); 
     uint256 public _totalUnLock = 0; 
-    uint256[] public _scheduleAmount; 
     address public immutable _multiSigWallet;
+
+    uint256[] public _scheduleAmount = [
+            3600000000000000,               0,               0,
+                        0,               0,               0,
+                        0,               0,               0,
+                        0,               0,               0,
+                        0, 600000000000000, 600000000000000,
+            600000000000000, 600000000000000, 600000000000000,
+            600000000000000, 600000000000000, 600000000000000,
+            600000000000000, 600000000000000, 600000000000000,
+            600000000000000, 600000000000000, 600000000000000,
+            600000000000000, 600000000000000, 600000000000000,
+            600000000000000, 600000000000000, 600000000000000,
+            600000000000000, 600000000000000, 600000000000000,
+            600000000000000,               0,               0,
+                        0,               0,               0,
+                        0,               0,               0,
+                        0,               0,               0,
+                        0
+        ];
 
     constructor(uint8 receiverIndex, address walletSigAddress) Ownable(msg.sender) {
         require(walletSigAddress != address(0), "walletSigAddress is null");
         require(receiverIndex >= 0 && receiverIndex <= 6, "The scope of the receiverIndex variable is incorrect.");
         require(isSorted(SCHEDULE_TIMES), "The array is not sorted.");
         require(TokenLockConst.SCHEDULE_TIMES.length == TokenLockConst.CONST_SCHEDULE_COUNT, "The array is not sorted.");
-        uint256[] memory amounts = TokenLockConst.SCHEDULE_AMOUNT;
-        require(amounts.length == TokenLockConst.CONST_SCHEDULE_COUNT, "Array is incorrect.");
-       
+        require(_scheduleAmount.length == TokenLockConst.CONST_SCHEDULE_COUNT, "Array is incorrect.");
+
         _receiverIndex = receiverIndex; 
-
-        _scheduleAmount = new uint256[](amounts.length);
-        for (uint8 i = 0; i < amounts.length; i++) {
-            _scheduleAmount[i] = amounts[i];
-        }
-
         _multiSigWallet = walletSigAddress;
     }
 
